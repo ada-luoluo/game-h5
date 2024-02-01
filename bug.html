@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="icon" href="./img/logo.svg">
+		<title>1x1 games</title>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<script>
+			window.jQuery || document.write('<script src="js/vue.global.js"><\/script>')
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+		<script>
+			window.jQuery || document.write('<script src="js/axios.min.js"><\/script>')
+		</script>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<div id="app">
+			<div class="logo">
+				<img src="img/logo.svg">
+			</div>
+			<div class="container big-container">
+				<div class="white-common">
+					<div class="black-common">
+						<div class="container-content">
+							<h1>購買代幣</h1>
+							<div class="login-input">
+								<span class="coin-icon">
+									<img src="img/coin.svg">
+								</span>
+
+								<span>
+									<input type="number" :value="quantity" @input="onInput" @blur="onBlur"
+										:min="minQuantity" :step="stepQuantity" />
+								</span>
+							</div>
+							<div style="display: flex;align-items: center;color: rgb(161 161 161);;line-height: 16px;">
+								<span style="padding-right: 10px;"><img src="img/shopping_img02.svg" /></span>
+								每次購買的代幣數至少是10個，並需為5的倍數。如：“10、15、20…”
+							</div>
+
+							<a class="buy-btn" :href="checkoutUrl" @click="paying($event)">
+								<span class="price">${{ totalPrice || 0 }}</span>
+								<span>付款</span>
+							</a>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<!--tips-->
+			<div class="message" v-if="message">
+				<p>{{ messageTxt }}</p>
+			</div>
+
+		</div>
+
+		<script>
+			const {
+				reactive,
+				computed
+			} = Vue;
+
+			const app = Vue.createApp({
+				data() {
+					return {
+						quantity: 0,
+						unitPrice: 0,
+						totalPrice: null,
+						timer: null,
+						minQuantity: 10,
+						stepQuantity: 5,
+						message: false,
+						svgUrl: '',
+						checkoutUrl: null,
+					}
+				},
+				methods: {
+					//input檢測,輸入代幣數的input
+					onInput(event) {
+						const value = parseInt(event.target.value);
+						if (Number.isNaN(value) || value < this.minQuantity || value % this.stepQuantity !== 0) {
+							event.target.setCustomValidity(`購買的代幣數至少是10個，並需為5的倍數`);
+						} else {
+							event.target.setCustomValidity("");
+							this.quantity = value;
+							clearTimeout(this.timer);
+							this.timer = setTimeout(this.updatePrice, 100);
+						}
+					},
+					onBlur(event) {
+						event.target.reportValidity();
+
+					},
+
+					//計算總價
+					updatePrice() {
+						const token = localStorage.getItem('token');
+						const formData = new FormData();
+						formData.append('number', this.quantity);
+						axios.post('https://api.1x1games.com/api/calculate_price', formData, {
+								headers: {
+									Authorization: 'Bearer ' + token,
+									'Content-Type': 'multipart/form-data'
+								}
+							})
+							.then((res) => {
+								if (res.data.code === 401) {
+									this.message = true
+									this.messageTxt = "授權失敗,請重新登錄!"
+									setTimeout(() => {
+										this.message = false
+										location.reload();
+										window.location.href = 'index.html';
+									}, 2000)
+								}
+								this.unitPrice = res.data.data.price; //单价
+								this.totalPrice = res.data.data.total; //总价
+							})
+							.catch((err) => {
+								console.log(err);
+							});
+					},
+
+					//付款
+					paying(event) {
+						event.preventDefault();
+						const token = localStorage.getItem('token');
+						const formData = new FormData();
+						formData.append('number', this.quantity);
+						if (this.quantity >= 10 && this.quantity % 5 === 0) {
+							axios.post('https://api.1x1games.com/api/buy_token', formData, {
+									headers: {
+										Authorization: 'Bearer ' + token,
+										'Content-Type': 'multipart/form-data'
+									}
+								})
+								.then((res) => {
+									if (res.data.code === 401) {
+										this.message = true
+										this.messageTxt = "授權失敗,請重新登錄!"
+										setTimeout(() => {
+											this.message = false
+											location.reload();
+											window.location.href = 'index.html';
+										}, 2000)
+									} else if (res.data.code == 200) {
+										const checkoutUrl = res.data.data.payment_url;
+										window.location.href = checkoutUrl;
+									} else {
+										this.message = true
+										this.messageTxt = res.data.message
+										setTimeout(() => {
+											this.message = false;
+										}, 2000)
+									}
+
+								})
+								.catch((err) => {
+									console.log(err);
+								});
+						} else {
+							return false;
+						}
+					},
+				},
+			}).mount('#app')
+		</script>
+
+	</body>
+</html>

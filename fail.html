@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="icon" href="./img/logo.svg">
+		<title>1x1 games</title>
+  	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<script>window.jQuery || document.write('<script src="js/vue.global.js"><\/script>')</script>
+		<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+		<script>window.jQuery || document.write('<script src="js/axios.min.js"><\/script>')</script>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<div id="app">
+	  <div class="logo">
+			<img src="img/logo.svg">
+		</div>
+		<div class="container big-container">
+			<div class="white-common">
+				<div class="black-common">
+					<div class="container-content">
+						<div class="result">
+							<img src="img/shopping_img15.svg">
+							<h4>付款失敗</h4>
+							<div class="result-btns">
+								<button class="login-btn out" type="button" @click="logout">登出</button>
+								 <a href="bug.html">
+									   返回
+									</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!--tips-->
+		<div class="message" v-if="message">
+			<p>{{ messageTxt }}</p>
+		</div>
+		
+	</div>
+	
+	<script>
+		const { createApp } = Vue
+	
+		createApp({
+			data() {
+				return {
+					is_app: '2',
+					message:false,
+				}
+			},
+			methods: {
+				//退出
+				logout() {
+					const token = localStorage.getItem('token');
+					const formData = new FormData();
+					formData.append('is_app', this.is_app);
+					axios.post('https://api.1x1games.com/api/logout', formData, {
+							headers: {
+								Authorization: 'Bearer ' + token,
+								'Content-Type': 'multipart/form-data'
+							}
+						})
+						.then((res) => {
+							this.message = true
+							this.messageTxt = "登出成功!"
+							setTimeout(() => {
+								this.message = false
+								location.reload();
+								window.location.href = 'index.html';
+							}, 2000)
+						})
+						.catch((err) => {
+							console.log(err);
+						});
+				}
+			}
+		}).mount('#app')
+	</script>
+	
+	</body>
+</html>

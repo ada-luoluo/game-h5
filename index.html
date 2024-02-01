@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="icon" href="./img/logo.svg">
+		<title>1x1 games</title>
+  	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<script>window.jQuery || document.write('<script src="js/vue.global.js"><\/script>')</script>
+		<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+		<script>window.jQuery || document.write('<script src="js/axios.min.js"><\/script>')</script>
+  	<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<div id="app">
+			<div class="logo">
+				<img src="img/logo.svg">
+			</div>
+			<div class="container">
+				<div class="white-common">
+					<div class="black-common">
+						<div class="container-content">
+							<div class="login-logo">
+								<img src="img/logo.svg">
+							</div>
+							<form @submit.prevent="submitForm">
+								<div class="login-input">
+									<span>
+										<img src="img/tele.svg">
+									</span>
+									<span style="position: relative;">
+										<!-- 区号 -->
+										<select class="gender" name="area-code" id="area-code" v-model="areaCode"
+											style="width: 60px; position: absolute; top: 0; left: 0">
+											<option v-for="code in areaCodes" :value="code.code">+{{code.code}}</option>
+										</select>
+										<!-- 手机号 -->
+										<input type="text" placeholder="請輸入手機號碼" style="padding-left: 70px"
+											autocomplete="off" v-model="tel" name="tel" @keydown.enter="submitForm">
+									</span>
+								</div>
+								<div class="login-input">
+									<span>
+										<img src="img/paw.svg">
+									</span>
+									<span>
+										<input type="password" placeholder="密碼" v-model="password" name="password"  @keydown.enter="submitForm">
+									</span>
+								</div>
+
+								<button type="button" class="login-btn" @click="submitForm">登入</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--tips-->
+			<div class="message" v-if="message">
+				<p>{{ messageTxt }}</p>
+			</div>
+
+		</div>
+
+		<script>
+			const { createApp } = Vue
+
+			createApp({
+				data() {
+					return {
+						areaCode: '852', //默认区号
+						areaCodes: [],
+						tel: '',
+						password: '',
+						is_app: '2',
+						message: false,
+					}
+				},
+				mounted() {
+					// 获取区号列表
+					this.getAreaCodes();
+				},
+				methods: {
+					//区号
+					getAreaCodes() {
+						// 发送Ajax请求，获取区号列表
+						axios.get('https://api.1x1games.com/api/area_codes').then(res => {
+							this.areaCodes = res.data.data;
+						}).catch(err => {
+							console.log(err);
+						});
+					},
+					// 提交表单
+					submitForm() {
+						//必填
+						if (this.tel == '') {
+						  this.message = true
+							this.messageTxt = "手機號碼為必填"
+							setTimeout(() => {
+								this.message = false;
+							}, 3000)
+							return false
+						}
+						if (this.password == '') {
+							this.message = true
+							this.messageTxt = "密碼為必填"
+							setTimeout(() => {
+								this.message = false;
+							}, 3000)
+							return false
+						}
+
+
+
+						// 构造FormData对象，用于提交数据
+						const formData = new FormData();
+						formData.append('area_code', this.areaCode);
+						formData.append('tel', this.tel);
+						formData.append('password', this.password);
+						formData.append('is_app', this.is_app);
+						// 发送Ajax请求，提交表单数据
+						// 这里使用axios库发送请求，需要引入axios库
+						axios.post('https://api.1x1games.com/api/auth/login', formData, {
+							headers: {
+								'Content-Type': 'multipart/form-data'
+							}
+						}).then(res => {
+							if (res.data.code == 200) {
+							localStorage.setItem('token', res.data.data.access_token); //保存token
+							this.message = true
+							this.messageTxt = "登錄成功"
+							setTimeout(() => {
+								this.message = false;
+									window.location.href = 'priceList.html';
+							}, 2000)
+							} else {
+								this.message = true
+								this.messageTxt = res.data.message
+								setTimeout(() => {
+									this.message = false;
+								}, 2000)
+							}
+
+						}).catch(err => {
+							console.log(err);
+
+						});
+					}
+
+				},
+			}).mount('#app')
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,788 @@
+body,
+ul,
+ol,
+li,
+dl,
+dt,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a {
+	margin: 0;
+	padding: 0;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+	outline: none;
+	border-color: transparent;
+	box-shadow: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+input:focus {
+	outline: none
+}
+
+
+/*:root -> 获取根元素html 定义基础字体颜色等*/
+:root {
+	--color-text: #fff;
+	--color-high-text: #E325DC;
+	--color-tint: #E1E1E1;
+	--background: #BD27B7;
+	--font-size: 16px;
+	--line-height: 1.5;
+}
+
+body {
+	font-family: Microsoft YaHei, Helvetica, "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", Arial, sans-serif;
+	/*user-select: none; !* 禁止用户鼠标在页面上选中文字/图片等 *!*/
+	-webkit-tap-highlight-color: transparent;
+	/* webkit是苹果浏览器引擎，tap点击，highlight背景高亮，color颜色，颜色用数值调节 */
+	color: var(--color-text);
+}
+
+input,
+button,
+select,
+textarea {
+	outline: none;
+	border: none;
+}
+
+a {
+	color: var(--color-text);
+	text-decoration: none;
+}
+
+.form-control:focus {
+	border-color: transparent;
+	box-shadow: none;
+}
+
+button {
+	cursor: pointer;
+}
+
+
+button:focus {
+	outline: 0;
+}
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+
+.clear {
+	clear: both
+}
+
+
+select{
+    /* !* 解决select下拉箭头在ios上不兼容的问题 *!*/
+    -webkit-appearance: none;
+    background: url('../img/jt.svg') no-repeat right center !important;
+    background-size: 0.5rem!important;
+}
+
+
+/**************************************************************************************************************/
+
+
+body {
+	min-width: 100%;
+	min-height: 100%;
+	height: calc(100vh - 0px);
+	width: 100vw;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: url(../img/shopping_bg.png) top center no-repeat;
+	object-fit: cover;
+}
+
+.container {
+	width: 500px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.logo {
+	width: 65px;
+	position: absolute;
+	top: 25px;
+	left: 46px;
+}
+
+
+.white-common {
+	padding: 3px;
+	background: #FFFFFF;
+	border: 1.5px solid var(--color-high-text);
+	box-shadow: 0px 0px 6px rgb(255 226 254 / 17%);
+}
+
+.black-common {
+	padding: 5px;
+	background: #000;
+	border: 1.5px solid var(--color-high-text);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+
+.container-content {
+	width: 100%;
+	padding: 15px;
+}
+
+.login-logo {
+	display: flex;
+	justify-content: center;
+	padding-bottom: 30px;
+}
+
+.login-logo img {
+	width: 66px;
+}
+
+
+.login-input {
+	background: #1F1F1F;
+	display: flex;
+	height: 44px;
+	align-items: center;
+	padding: 0 20px;
+	margin-bottom: 20px;
+}
+
+
+.login-input span:nth-child(2) {
+	width: 100%;
+}
+
+.login-input span img {
+	margin-right: 10px;
+}
+
+.login-input input {
+	width: 100%;
+	background: transparent;
+	color: #fff;
+	height: 44px;
+}
+
+.login-btn {
+	width: 100%;
+	height: 60px;
+	color: #fff;
+	background: var(--background);
+	margin: 20px 0;
+	font-weight: 600;
+	font-size: 18px;
+}
+
+.return {
+	width: 100%;
+	height: 60px;
+	color: #fff;
+	background: var(--background);
+	margin: 20px 0;
+	font-weight: 600;
+	font-size: 18px;
+}
+
+.container-content h1 {
+	padding-bottom: 20px;
+	text-align: center;
+}
+
+.price-title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: #C2C2C2;
+	width: 94%;
+}
+
+.list {
+	max-height: 284px;
+	overflow-y: auto;
+}
+
+.list::-webkit-scrollbar {
+	/*滚动条整体样式*/
+	width: 4px;
+	/*高宽分别对应横竖滚动条的尺寸*/
+	height: 4px;
+}
+
+.list::-webkit-scrollbar-thumb {
+	/*滚动条里面小方块*/
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.4);
+	background: rgba(255, 255, 255, 0.4);
+}
+
+.list::-webkit-scrollbar-track {
+	/*滚动条里面轨道*/
+	-webkit-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
+	border-radius: 0;
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.list ul li {
+	list-style: none;
+	width: 94%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 36px 0;
+	position: relative;
+	font-size: 20px;
+	font-weight: bold;
+
+}
+
+.list ul li::after {
+	content: '';
+	display: block;
+	width: 100%;
+	height: 2px;
+	background-color: #fff;
+	border: 1px solid var(--color-high-text);
+	position: absolute;
+	bottom: -15px;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 100%;
+}
+
+.list ul li:first-child {
+	margin-top: 20px;
+}
+
+.container-content h5 {
+	color: #C2C2C2;
+	font-weight: normal;
+	font-size: 14px;
+	display: flex;
+  margin-top: 10px;
+}
+
+.container-content h5 img {
+	margin-right: 5px;
+}
+
+
+.buy {
+	background: #353535;
+	height: 60px;
+	display: flex;
+	align-items: center;
+	padding: 0 10px;
+}
+
+.coin-icon img {
+	width: 25px;
+}
+
+.pay-way {
+	background: #353535;
+	padding: 20px;
+}
+
+.pay-way h5 {
+	color: #FFFFFF;
+}
+
+.pay-list ul {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+
+.pay-list ul li {
+	width: 23%;
+	list-style: none;
+	padding: 20px;
+	background: #515151;
+	border: 1.5px solid #515151;
+}
+
+.pay-txt {
+	width: 100%;
+	text-align: center;
+	padding-top: 10px;
+}
+
+.pay-icon {
+	height: 68px;
+	display: flex;
+	align-items: center;
+}
+
+.common-icon img {
+	max-width: 100%;
+}
+
+.color-icon {
+	display: none;
+}
+
+.pay-list ul li:hover .white-icon {
+	display: none;
+}
+
+.pay-list ul li:hover .color-icon {
+	display: block;
+}
+
+.pay-list ul li:hover {
+	border: 1.5px solid #E325DC;
+	cursor: pointer;
+}
+
+.pay-list ul li.active {
+	border: 1.5px solid #E325DC;
+	cursor: pointer;
+}
+
+.pay-list ul li.active .color-icon{
+		display: block;
+}
+
+.pay-list ul li.active .white-icon{
+	display: none;
+}
+
+.big-container {
+	width: 765px;
+}
+
+.big-container input {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.buy-btn {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 60px;
+	padding: 0 30px;
+	margin: 40px 0 20px 0;
+	background: var(--background);
+	cursor: pointer;
+}
+
+.price {
+	font-weight: 700;
+	font-size: 24px;
+}
+
+.result {
+	width: 60%;
+	margin: 0 auto;
+}
+
+.result h4 {
+	font-size: 20px;
+	text-align: center;
+}
+
+.result img {
+	margin: 50px auto;
+	display: block;
+}
+
+.result-btns {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.result-btns button,
+.result-btns a {
+	width: 40%;
+	margin: 50px 30px;
+}
+
+.result-btns a {
+	width: 40%;
+	height: 60px;
+	color: #fff;
+	background: var(--background);
+	font-weight: 600;
+	font-size: 18px;
+	display: block;
+	text-align: center;
+	line-height: 60px;
+}
+
+.out {
+	background: transparent;
+	border: 1px solid #fff;
+}
+
+
+.gender {
+	width: 100%;
+	height: 44px;
+	background: transparent;
+	color: #9E9E9E;
+}
+
+.message {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.message p {
+	font-size: 14px;
+	padding: 15px 30px;
+	background-color: rgba(0, 0, 0, 1);
+	border: 1px solid rgba(255, 255, 255, .6);
+}
+
+/**************************/
+
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999999;
+}
+
+.modal-content {
+	background-color: #000;
+	border-radius: 5px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+	width: 80%;
+	max-width: 500px;
+
+}
+
+.modal-overlay header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.modal-overlay header h3 {
+	width: 100%;
+	text-align: center;
+}
+
+.modal-overlay footer {
+	display: flex;
+
+	position: relative;
+}
+
+.modal-overlay .close {
+	padding: 10px;
+	border: none;
+	border-radius: 0px;
+	cursor: pointer;
+	background: transparent;
+	color: #fff;
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 999;
+}
+
+.modal-content .black-common {
+	display: inherit;
+	padding: 20px;
+	position: relative;
+}
+
+.modal-overlay .modal-body {
+	padding: 10px 0;
+}
+
+.form-input {
+	margin: 5px 0;
+}
+
+.form-common-input {
+	width: 100%;
+	height: 40px;
+	background: #353535;
+	margin: 10px 0;
+	padding: 0 10px;
+	color: #fff;
+}
+
+.form-input-2 {
+	display: flex;
+	justify-content: space-between;
+}
+
+.form-input-2 .form-input-other{
+	width: 48%;
+}
+
+.form-input-2 .form-common-input {
+	width: 100%;
+}
+
+.pay-btn {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 60px;
+	padding: 0 30px;
+	margin: 40px 0 20px 0;
+	background: var(--background);
+	cursor: pointer;
+	width: 100%;
+	text-align: center;
+	display: block;
+	color: #fff;
+	font-weight: bold;
+	font-size: 16px;
+}
+.laber-title{
+/* 	margin-top: 10px; */
+}
+
+
+@media only screen and (min-width:0px) and (max-width:767px) {
+	.container {
+		width: 100%;
+		padding: 0 20px;
+	}
+
+	.container-content {
+		padding: 15px;
+	}
+
+	.logo {
+		display: none;
+	}
+
+	.result {
+		width: 100%;
+	}
+
+	.pay-list ul {
+		flex-wrap: wrap;
+		justify-content: flex-start;
+	}
+
+	.pay-list ul li {
+		width: 30%;
+		padding: 10px;
+		margin: 10px 1.5%;
+	}
+
+	.pay-txt {
+		font-size: 13px;
+	}
+
+	.container-content h1 {
+		font-size: 20px;
+		padding-bottom: 20px;
+	}
+
+	.pay-list ul {
+		margin-top: 10px;
+	}
+
+	.pay-list ul li {
+		width: 100%;
+		padding: 5px 10px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin: 5px 0;
+	}
+
+	.pay-icon {
+		height: inherit;
+	}
+
+	.pay-txt {
+		width: inherit;
+		padding-top: 0;
+		text-align: right;
+	}
+
+	.buy-btn {
+		margin: 20px 0 0 0;
+	}
+	.form-input-2{
+		flex-wrap: wrap;
+	}
+	
+	.form-input-2 .form-input-other{
+		width: 100%;
+	}
+	.pay-btn {
+	    margin: 20px 0;
+	}
+	
+	.list {
+	    max-height: 290px;	   
+	}
+	
+
+}
+
+/**********************/
+
+.must-agree{
+	display: flex;
+	margin-top: 12px;
+	font-size: 14px;
+}
+
+.must-agree span{
+	cursor: pointer;
+	padding-left: 8px;
+	color: #C2C2C2;
+}
+
+span.ruls{
+	padding-left: 0;
+	color: #fff;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
+
+.modal-content {
+  background-color: #000;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  width: 80%;
+  max-width: 500px;
+
+}
+
+.modal-overlay header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-overlay header h3{
+  width: 100%;
+  text-align: center;
+}
+
+.modal-overlay footer {
+  display: flex;
+  position: relative;
+}
+
+.modal-overlay .close {
+  padding: 10px;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+  background: transparent;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.modal-content .black-common{
+  display: inherit;
+  padding: 20px;
+  position: relative;
+}
+
+.modal-overlay .modal-body{
+  padding: 10px 0;
+}
+
+.dialog-txt ul{
+	 padding: 0 20px;
+	 margin-top: 10px;
+}
+
+.dialog-txt ul li{
+	padding: 5px 0;
+}
+
+
+/* dialog-txt */
+.dialog-txt {
+	max-height: 340px;
+	overflow-y: auto;
+}
+
+.dialog-txt::-webkit-scrollbar {
+	/*滚动条整体样式*/
+	width: 4px;
+	/*高宽分别对应横竖滚动条的尺寸*/
+	height: 4px;
+}
+
+.dialog-txt::-webkit-scrollbar-thumb {
+	/*滚动条里面小方块*/
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.4);
+	background: rgba(255, 255, 255, 0.4);
+}
+
+.dialog-txt::-webkit-scrollbar-track {
+	/*滚动条里面轨道*/
+	-webkit-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
+	border-radius: 0;
+	background: rgba(255, 255, 255, 0.2);
+}

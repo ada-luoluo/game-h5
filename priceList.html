@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="icon" href="./img/logo.svg">
+		<title>1x1 games</title>
+  	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<script>window.jQuery || document.write('<script src="js/vue.global.js"><\/script>')</script>
+		<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+		<script>window.jQuery || document.write('<script src="js/axios.min.js"><\/script>')</script>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<div id="app">
+			<div class="logo">
+					<img src="img/logo.svg">
+				</div>
+				<div class="container big-container">
+					<div class="white-common">
+						<div class="black-common">
+							<div class="container-content">
+								<h1>代幣價格列表</h1>
+								<div class="price-title">
+									<span>數量</span>
+									<span>價格</span>
+									<span>單價</span>
+								</div>
+								<div class="list">
+									<ul>
+									  <li v-for="item in priceList" :key="item">
+											<div>
+												<img src="img/coin.svg" /> 
+									        {{ item.total === null ? item.number + '以上' : item.number }}
+											</div>
+										  <span v-if="item.total">${{item.total}}</span>
+											<span>${{item.price}}</span>
+										</li>
+									</ul>
+								</div>
+								<h5><img src="img/shopping_img02.svg">以上代幣數量是包含該數量或以下數量</h5>
+								<div class="must-agree">
+									 <input type="checkbox" name="agree" id="agree" v-model="agree" required>	
+									 <span>我接受</span>
+									 <span class="ruls" @click="openRuls">
+								    網上付款- 條款及細則
+									</span>
+								</div>
+							
+									<button class="login-btn" @click="goto">去購買</button>
+							
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--tips-->
+				<div class="message" v-if="message">
+					<p>{{ messageTxt }}</p>
+				</div>
+				<!-- 細則彈窗 -->
+				  <div class="modal-overlay" v-if="dialog">
+				    <div class="modal-content">
+				      <div class="white-common">
+				        <div class="black-common">
+				          <header>
+				            <h3>網上付款- 條款及細則</h3>
+				            <div @click="closeModal" class="close" >X</div>
+				          </header>
+				          <div class="modal-body dialog-txt">
+				             <p>我同意</p>
+										 <ul>
+											 <li>用港幣$5.00 購買一個代幣而每一次最小要購買十個代幣。</li>
+											 <li>代幣用作在店舖玩遊戲之用而需要代幣的數量則視乎個別遊戲的要求。當你開始玩遊戲時你已視作同意這遊戲所需代幣的數量。</li>
+											 <li>積分是玩遊戲所得的成績但如果成績未能達到所玩遊戲之最低要求則有機會得不到任何積分。</li>
+											 <li>積分可用作兌現禮品券而積分的多小會兌現不同價值的禮品。禮品券兌現後將會有90天的有效期。</li>
+											 <li>所有代弊不能轉換成現金</li>
+											</ul>
+				          </div>
+				         </div>
+				      </div>
+				    </div>
+				  </div>
+	  	</div>
+	
+<script>
+ const { createApp } = Vue
+   
+   createApp({
+     data() {
+       return {
+         priceList: [],
+				 agree:false,
+				 message:false,
+				 dialog:false,
+       }
+     },
+		 mounted() {
+		 	// 从localStorage中获取token
+		 	const token = localStorage.getItem('token');
+		 	// 如果token不存在，则跳转到登录页面
+		 	if (!token) {
+		 	 window.location.href = 'index.html';
+		 	} else {
+		 	 // 如果token存在，则发送Ajax请求，获取价格列表数据
+		 	 this.getPriceList(token);
+		 	}
+		 },
+		 methods:{
+
+			 //获取价格
+			 getPriceList(token) {
+			  axios.get('https://api.1x1games.com/api/token_prices', { headers: { 'Authorization': `Bearer ${token}` } }).then(res => {
+					if(res.data.code === 401){
+					this.message = true
+					this.messageTxt = "授權失敗,請重新登錄!"
+					 setTimeout(() => {
+							this.message = false
+							location.reload();
+						  window.location.href = 'index.html';        
+						 }, 2000)
+					 }
+			 	this.priceList = res.data.data;
+		    }).catch(err => {
+			   console.log(err);
+			  });
+			 },
+			 
+			 //去购买
+			 goto(){
+			    if(!this.agree) {
+						   this.message = true
+				         this.messageTxt = "必須同意網上付款- 條款及細則"
+				         setTimeout(() => {
+				           this.message = false
+				         }, 3000)
+				          return false
+				     }else{
+							  window.location.href = 'bug.html';    
+						 }
+			  },
+				openRuls(){
+					this.dialog = true
+				},
+				closeModal(){
+					this.dialog = false
+				},
+			},
+   }).mount('#app')
+ 
+ </script>
+
+
+	</body>
+</html>
